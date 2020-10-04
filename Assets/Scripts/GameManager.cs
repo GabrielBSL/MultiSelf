@@ -9,8 +9,9 @@ public class GameManager : MonoBehaviour
     public GameObject player;
     public GameObject ghosts;
     public GameObject clocks;
+    public GameObject frog;
     public Transform spawnPlayer;
-
+    public Transform spawnFrog;
     public float timeToRespawn;
     public float respawnDelay;
     public int maxGhosts;
@@ -58,6 +59,7 @@ public class GameManager : MonoBehaviour
     IEnumerator RespawnCall()
     {
         player.GetComponent<PlayerController>().StartDeath();
+        frog.GetComponent<FrogController>().StartDeath();
         yield return new WaitForSeconds(respawnDelay);
         ResetPositions();
     }
@@ -67,6 +69,7 @@ public class GameManager : MonoBehaviour
         timer = 0f;
 
         player.GetComponent<PlayerController>().ResetPlayerObject(spawnPlayer.transform);
+        frog.GetComponent<FrogController>().ResetFrogObject(spawnFrog.transform);
         ghosts.GetComponent<GhostsManager>().DeleteGhosts();
         clocks.GetComponent<ClocksManager>().ResetClocks();
 
@@ -77,6 +80,7 @@ public class GameManager : MonoBehaviour
     private void ResetPositions()
     {
         player.GetComponent<PlayerController>().CreateNewGhost(spawnPlayer.transform);
+        frog.GetComponent<FrogController>().ResetFrogObject(spawnFrog.transform);
         ghosts.GetComponent<GhostsManager>().ResetGhosts(spawnPlayer.transform, maxGhosts);
         clocks.GetComponent<ClocksManager>().ResetClocks();
 
