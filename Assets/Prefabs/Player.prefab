@@ -186,7 +186,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spawnPlayer: {fileID: 0}
-  speed: 2
+  speed: 5
   jumpForce: 7
   frontUp: {fileID: 6081405486045475742}
   frontDown: {fileID: 6195585076404595759}
@@ -195,6 +195,7 @@ MonoBehaviour:
     m_Bits: 256
   deathEffect: {fileID: 8816392569770054673}
   isGhost: 0
+  gravityRotation: 1
 --- !u!1 &4364956089887972351
 GameObject:
   m_ObjectHideFlags: 0
