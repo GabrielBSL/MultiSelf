@@ -29,6 +29,10 @@ public class PlayerController : MonoBehaviour
 
     [HideInInspector]
     public bool isGhost;
+    [HideInInspector]
+    public bool gravityChanged;
+    [HideInInspector]
+    public float gravityRotation = 1f;
 
     // Start is called before the first frame update
     void Awake()
@@ -40,6 +44,7 @@ public class PlayerController : MonoBehaviour
 
     private void Start()
     {
+        gravityChanged = false;
         jumping = false;
         isFacingRight = true;
         withPlayer = false;
@@ -61,7 +66,7 @@ public class PlayerController : MonoBehaviour
         if (!isGhost)
         {
             RecordMovement();
-            Movement(Input.GetAxis("Horizontal"));
+            Movement(Input.GetAxis("Horizontal"), Time.deltaTime);
             Jump(Input.GetButtonDown("Jump"));
         }
         else
@@ -73,7 +78,7 @@ public class PlayerController : MonoBehaviour
 
                 else
                 {
-                    Movement(movementRecord[currentMovement].horizontalAxis);
+                    Movement(movementRecord[currentMovement].horizontalAxis, movementRecord[currentMovement].deltaTime);
                     Jump(movementRecord[currentMovement].jumpButtonDown);
                     currentMovement++;
                 }
@@ -113,10 +118,10 @@ public class PlayerController : MonoBehaviour
 
     private void RecordMovement()
     {
-        movementRecord.Add(new RecordValues(Input.GetAxis("Horizontal"), Input.GetButtonDown("Jump"), false));
+        movementRecord.Add(new RecordValues(Input.GetAxis("Horizontal"), Time.deltaTime, Input.GetButtonDown("Jump"), false));
     }
     
-    private void Movement(float horizontal)
+    private void Movement(float horizontal, float deltaTime)
     {
         wallColliding = Physics2D.Linecast(frontUp.position, frontDown.position, layer);
 
@@ -125,7 +130,7 @@ public class PlayerController : MonoBehaviour
             (horizontal < 0 && isFacingRight == true))
         {
             Vector3 movement = new Vector3(horizontal, 0f, 0f);
-            transform.position += movement * Time.fixedDeltaTime * speed;
+            transform.position += movement * deltaTime * speed;
 
             if (withPlayer)
             {
@@ -137,13 +142,13 @@ public class PlayerController : MonoBehaviour
         {
             isFacingRight = true;
             anim.SetBool("walking", true);
-            transform.eulerAngles = new Vector3(0f, 0f, 0f);
+            transform.eulerAngles = new Vector3(0f, 90f - (90 * gravityRotation), 90f - (90 * gravityRotation));
         }
         else if (horizontal < 0)
         {
             isFacingRight = false;
             anim.SetBool("walking", true);
-            transform.eulerAngles = new Vector3(0f, 180f, 0f);
+            transform.eulerAngles = new Vector3(0f, 90f + (90 * gravityRotation), 90f - (90 * gravityRotation));
         }
         else
         {
@@ -156,7 +161,7 @@ public class PlayerController : MonoBehaviour
         if (jump && !jumping)
         {
             jumping = true;
-            rig.velocity = new Vector2(0f, jumpForce);
+            rig.velocity = new Vector2(0f, jumpForce * gravityRotation);
 
             if (withPlayer)
             {
@@ -233,7 +238,7 @@ public class PlayerController : MonoBehaviour
     public void StartDeath()
     {
         if(!isGhost)
-            movementRecord.Add(new RecordValues(0, false, true));
+            movementRecord.Add(new RecordValues(0, Time.deltaTime, false, true));
 
         isDead = true;
         deathEffect.SetActive(true);
@@ -253,10 +258,26 @@ public class PlayerController : MonoBehaviour
         GetComponent<BoxCollider2D>().enabled = true;
         GetComponent<CircleCollider2D>().enabled = true;
         GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Dynamic;
+
+        GetComponent<Rigidbody2D>().gravityScale = 1f;
+        gravityRotation = 1f;
+        transform.eulerAngles = new Vector3(0f, 0f, 0f);
     }
 
     public void SelfDestroy()
     {
         Destroy(gameObject);
+    }
+
+    public void GravityHasChanged()
+    {
+        gravityChanged = true;
+        StartCoroutine(GravityDelay());
+    }
+
+    IEnumerator GravityDelay()
+    {
+        yield return new WaitForSeconds(0.5f);
+        gravityChanged = false;
     }
 }
