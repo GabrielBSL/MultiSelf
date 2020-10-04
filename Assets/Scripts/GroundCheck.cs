@@ -42,6 +42,17 @@ public class GroundCheck : MonoBehaviour
         //(playerObject.transform.position.y > gameObject.transform.position.y && playerObject.GetComponent<Rigidbody2D>().velocity.y < 0
     }
 
+    private void OnTriggerStay2D(Collider2D collision)
+    {
+        if (collision.tag == "Button")
+        {
+            if (!collision.GetComponent<ButtonBehavior>().GetActivation())
+            {
+                collision.gameObject.GetComponent<ButtonBehavior>().StayPressed();
+            }
+        }
+    }
+
     private void OnTriggerExit2D(Collider2D collision)
     {
         if (collision.tag == "Player")

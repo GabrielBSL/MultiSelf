@@ -95,6 +95,11 @@ public class PlayerController : MonoBehaviour
         CheckJump();
     }
 
+    private void RecordMovement()
+    {
+        movementRecord.Add(new RecordValues(Input.GetAxis("Horizontal"), Time.deltaTime, Input.GetButtonDown("Jump"), false));
+    }
+
     private void DoJumpFromBelow()
     {
         rig.velocity = new Vector2(0f, jumpForce);
@@ -105,22 +110,17 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    private void DoMoveFromBelow(float _horizontal)
+    private void DoMoveFromBelow(float _horizontal, float _deltaTime)
     {
         Vector3 movement = new Vector3(_horizontal, 0f, 0f);
-        transform.position += movement * Time.fixedDeltaTime * speed;
+        transform.position += movement * _deltaTime * speed;
 
         if (withPlayer)
         {
-            playerAbove.GetComponent<PlayerController>().DoMoveFromBelow(_horizontal);
+            playerAbove.GetComponent<PlayerController>().DoMoveFromBelow(_horizontal, _deltaTime);
         }
     }
 
-    private void RecordMovement()
-    {
-        movementRecord.Add(new RecordValues(Input.GetAxis("Horizontal"), Time.deltaTime, Input.GetButtonDown("Jump"), false));
-    }
-    
     private void Movement(float horizontal, float deltaTime)
     {
         wallColliding = Physics2D.Linecast(frontUp.position, frontDown.position, layer);
@@ -134,7 +134,7 @@ public class PlayerController : MonoBehaviour
 
             if (withPlayer)
             {
-                playerAbove.GetComponent<PlayerController>().DoMoveFromBelow(horizontal);
+                playerAbove.GetComponent<PlayerController>().DoMoveFromBelow(horizontal, deltaTime);
             }
         }
 
@@ -163,6 +163,10 @@ public class PlayerController : MonoBehaviour
             jumping = true;
             rig.velocity = new Vector2(0f, jumpForce * gravityRotation);
 
+            if (!isGhost)
+            {
+                FindObjectOfType<AudioManager>().Play("PlayerJump");
+            }
             if (withPlayer)
             {
                 playerAbove.GetComponent<PlayerController>().DoJumpFromBelow();
@@ -217,11 +221,14 @@ public class PlayerController : MonoBehaviour
             StartRespawn();
     }
 
-    public void ResetPlayerObject(Transform spawnPosition)
+    public void ResetPlayerObject(Transform spawnPosition, bool resetMovementRecord)
     {
         StartRespawn();
         currentMovement = 0;
         transform.position = spawnPosition.position;
+
+        if(resetMovementRecord)
+            movementRecord = new List<RecordValues>();
     }
 
     public void SetWithPlayer(bool _withPlayer, GameObject otherPlayer)
@@ -237,8 +244,11 @@ public class PlayerController : MonoBehaviour
 
     public void StartDeath()
     {
-        if(!isGhost)
+        if (!isGhost)
+        {
             movementRecord.Add(new RecordValues(0, Time.deltaTime, false, true));
+            FindObjectOfType<AudioManager>().Play("PlayerDeath");
+        }
 
         isDead = true;
         deathEffect.SetActive(true);

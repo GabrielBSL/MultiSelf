@@ -66,7 +66,7 @@ public class GameManager : MonoBehaviour
     {
         timer = 0f;
 
-        player.GetComponent<PlayerController>().ResetPlayerObject(spawnPlayer.transform);
+        player.GetComponent<PlayerController>().ResetPlayerObject(spawnPlayer.transform, true);
         ghosts.GetComponent<GhostsManager>().DeleteGhosts();
         clocks.GetComponent<ClocksManager>().ResetClocks();
 

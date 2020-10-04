@@ -19,7 +19,7 @@ public class GhostsManager : MonoBehaviour
 
             else
             {
-                child.gameObject.GetComponent<PlayerController>().ResetPlayerObject(spawnPosition);
+                child.gameObject.GetComponent<PlayerController>().ResetPlayerObject(spawnPosition, false);
             }
 
             currentGhost--;
