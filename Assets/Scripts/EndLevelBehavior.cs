@@ -11,7 +11,7 @@ public class EndLevelBehavior : MonoBehaviour
         {
             if (!collision.GetComponent<PlayerController>().isGhost)
             {
-                SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+                FindObjectOfType<GameManager>().LoadNextScene();
             }
         }
     }

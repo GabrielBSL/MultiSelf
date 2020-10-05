@@ -10,11 +10,11 @@ public class KillerBlockBehavior : MonoBehaviour
     {
         if (killGhost)
         {
-            GetComponent<SpriteRenderer>().color = new Color(0.5f, 0.5f, 0.5f, 0.5f);
+            GetComponent<SpriteRenderer>().color = new Color(0.5f, 0.5f, 0.5f, 0.75f);
         }
         else
         {
-            GetComponent<SpriteRenderer>().color = new Color(0f, 1f, 1f, 0.5f);
+            GetComponent<SpriteRenderer>().color = new Color(0f, 1f, 1f, 0.75f);
         }
     }
 

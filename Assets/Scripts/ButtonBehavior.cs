@@ -7,6 +7,8 @@ public class ButtonBehavior : MonoBehaviour
 {
     public float activationSpeed;
     public float moveTime;
+    public bool isInverted;
+    private float inversion;
     private float timer;
     private bool activated;
 
@@ -19,6 +21,12 @@ public class ButtonBehavior : MonoBehaviour
 
     private void Start()
     {
+        if (isInverted)
+            inversion = -1f;
+
+        else
+            inversion = 1f;
+
         activated = false;
         players = new List<GameObject>();
         timer = 0f;
@@ -39,17 +47,17 @@ public class ButtonBehavior : MonoBehaviour
         if (activated && timer < moveTime)
         {
             timer += Time.deltaTime;
-            transform.position = new Vector3(transform.position.x, transform.position.y - activationSpeed * Time.deltaTime, transform.position.z);
+            transform.position = new Vector3(transform.position.x, transform.position.y - (activationSpeed * Time.deltaTime * inversion), transform.position.z);
 
             foreach (var player in players)
             {
-                player.transform.position = new Vector3(player.transform.position.x, player.transform.position.y - activationSpeed * Time.deltaTime, player.transform.position.z);
+                player.transform.position = new Vector3(player.transform.position.x, player.transform.position.y - (activationSpeed * Time.deltaTime * inversion), player.transform.position.z);
             }
         }
         else if (!activated && timer > 0)
         {
             timer -= Time.deltaTime;
-            transform.position = new Vector3(transform.position.x, transform.position.y + activationSpeed * Time.deltaTime, transform.position.z);
+            transform.position = new Vector3(transform.position.x, transform.position.y + (activationSpeed * Time.deltaTime * inversion), transform.position.z);
         }
     }
 
