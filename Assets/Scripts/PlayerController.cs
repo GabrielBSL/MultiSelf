@@ -17,7 +17,8 @@ public class PlayerController : MonoBehaviour
     private bool withPlayer;
     private bool wallColliding;
     private bool isFacingRight;
-    private bool isDead;
+    private bool aboveGround;
+    public bool isDead;
     private int currentMovement;
 
     public Transform frontUp;
@@ -95,6 +96,11 @@ public class PlayerController : MonoBehaviour
         CheckJump();
     }
 
+    private void RecordMovement()
+    {
+        movementRecord.Add(new RecordValues(Input.GetAxis("Horizontal"), Time.deltaTime, Input.GetButtonDown("Jump"), false));
+    }
+
     private void DoJumpFromBelow()
     {
         rig.velocity = new Vector2(0f, jumpForce);
@@ -105,22 +111,17 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    private void DoMoveFromBelow(float _horizontal)
+    private void DoMoveFromBelow(float _horizontal, float _deltaTime)
     {
         Vector3 movement = new Vector3(_horizontal, 0f, 0f);
-        transform.position += movement * Time.fixedDeltaTime * speed;
+        transform.position += movement * _deltaTime * speed;
 
         if (withPlayer)
         {
-            playerAbove.GetComponent<PlayerController>().DoMoveFromBelow(_horizontal);
+            playerAbove.GetComponent<PlayerController>().DoMoveFromBelow(_horizontal, _deltaTime);
         }
     }
 
-    private void RecordMovement()
-    {
-        movementRecord.Add(new RecordValues(Input.GetAxis("Horizontal"), Time.deltaTime, Input.GetButtonDown("Jump"), false));
-    }
-    
     private void Movement(float horizontal, float deltaTime)
     {
         wallColliding = Physics2D.Linecast(frontUp.position, frontDown.position, layer);
@@ -134,7 +135,7 @@ public class PlayerController : MonoBehaviour
 
             if (withPlayer)
             {
-                playerAbove.GetComponent<PlayerController>().DoMoveFromBelow(horizontal);
+                playerAbove.GetComponent<PlayerController>().DoMoveFromBelow(horizontal, deltaTime);
             }
         }
 
@@ -158,11 +159,16 @@ public class PlayerController : MonoBehaviour
 
     private void Jump(bool jump)
     {
-        if (jump && !jumping)
+        if (jump && !jumping && aboveGround)
         {
             jumping = true;
+            aboveGround = false;
             rig.velocity = new Vector2(0f, jumpForce * gravityRotation);
 
+            if (!isGhost)
+            {
+                FindObjectOfType<AudioManager>().Play("PlayerJump");
+            }
             if (withPlayer)
             {
                 playerAbove.GetComponent<PlayerController>().DoJumpFromBelow();
@@ -183,7 +189,7 @@ public class PlayerController : MonoBehaviour
         {
             anim.SetBool("falling", false);
             anim.SetBool("jumping", true);
-            rig.velocity = Vector3.ClampMagnitude(rig.velocity, jumpForce);
+            rig.velocity = Vector3.ClampMagnitude(rig.velocity, jumpForce * 2f);
         }
 
         else
@@ -196,6 +202,12 @@ public class PlayerController : MonoBehaviour
     public void IsGrounded()
     {
         jumping = false;
+        aboveGround = true;
+    }
+
+    public void isNotGrounded()
+    {
+        aboveGround = false;
     }
 
     public void GetRecordedMovements(List<RecordValues> recordedMovements)
@@ -217,11 +229,14 @@ public class PlayerController : MonoBehaviour
             StartRespawn();
     }
 
-    public void ResetPlayerObject(Transform spawnPosition)
+    public void ResetPlayerObject(Transform spawnPosition, bool resetMovementRecord)
     {
         StartRespawn();
         currentMovement = 0;
         transform.position = spawnPosition.position;
+
+        if(resetMovementRecord)
+            movementRecord = new List<RecordValues>();
     }
 
     public void SetWithPlayer(bool _withPlayer, GameObject otherPlayer)
@@ -237,8 +252,11 @@ public class PlayerController : MonoBehaviour
 
     public void StartDeath()
     {
-        if(!isGhost)
+        if (!isGhost)
+        {
             movementRecord.Add(new RecordValues(0, Time.deltaTime, false, true));
+            FindObjectOfType<AudioManager>().Play("PlayerDeath");
+        }
 
         isDead = true;
         deathEffect.SetActive(true);

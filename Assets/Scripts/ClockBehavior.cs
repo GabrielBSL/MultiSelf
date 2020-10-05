@@ -6,6 +6,7 @@ public class ClockBehavior : MonoBehaviour
 {
     public float bonusTime;
     private bool playerGet = false;
+    private bool canPlay = false;
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
@@ -15,6 +16,7 @@ public class ClockBehavior : MonoBehaviour
             {
                 playerGet = true;
                 FindObjectOfType<GameManager>().AddTime(bonusTime);
+                FindObjectOfType<AudioManager>().Play("PlayerCatch");
                 gameObject.GetComponent<SpriteRenderer>().enabled = false;
             }
         }

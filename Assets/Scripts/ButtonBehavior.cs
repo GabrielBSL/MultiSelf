@@ -91,4 +91,15 @@ public class ButtonBehavior : MonoBehaviour
             block.Deactivate();
         }
     }
+
+    public void StayPressed()
+    {
+        activated = true;
+        Activate();
+    }
+
+    public bool GetActivation()
+    {
+        return activated;
+    }
 }
