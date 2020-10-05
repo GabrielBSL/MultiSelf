@@ -11,7 +11,8 @@ public class TimedEvents : MonoBehaviour
 
     void Start()
     {
-        StartCoroutine(TriggerEventInSeconds());
+        if(time != 0f)
+            StartCoroutine(TriggerEventInSeconds());
     }
 
     IEnumerator TriggerEventInSeconds()

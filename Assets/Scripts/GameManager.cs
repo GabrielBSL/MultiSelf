@@ -1,10 +1,15 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
+    [Header("PauseCanvas")]
+    public GameObject pauseCanvas;
+
+    [Header("Rest")]
     public Text timeText;
     public GameObject player;
     public GameObject ghosts;
@@ -43,6 +48,39 @@ public class GameManager : MonoBehaviour
                 StartRestart();
             }
         }
+
+        CheckKeys();
+    }
+
+    private void CheckKeys()
+    {
+        if (Input.GetButtonDown("Cancel"))
+        {
+            PauseCanvasAction();
+        }
+        if (Input.GetKeyDown("o"))
+        {
+            if(!player.GetComponent<PlayerController>().isDead)
+                ResetStage();
+        }
+        if (Input.GetKeyDown("p"))
+        {
+            StartRestart();
+        }
+    }
+
+    public void PauseCanvasAction()
+    {
+        if (pauseCanvas.active == false)
+        {
+            Time.timeScale = 0;
+            pauseCanvas.SetActive(true);
+        }
+        else
+        {
+            Time.timeScale = 1;
+            pauseCanvas.SetActive(false);
+        }
     }
 
     public void StartRestart()
@@ -67,6 +105,7 @@ public class GameManager : MonoBehaviour
         timer = 0f;
 
         player.GetComponent<PlayerController>().ResetPlayerObject(spawnPlayer.transform, true);
+        player.GetComponent<Rigidbody2D>().velocity = new Vector2(0, 0);
         ghosts.GetComponent<GhostsManager>().DeleteGhosts();
         clocks.GetComponent<ClocksManager>().ResetClocks();
 

@@ -17,54 +17,56 @@ public class GroundCheck : MonoBehaviour
     // Update is called once per frame
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.tag == "Ground")
-            player.GetComponent<PlayerController>().IsGrounded();
-
         if (collision.tag == "Player")
         {
-            player.GetComponent<PlayerController>().IsGrounded();
-
-            if (collision.transform.position.y < transform.parent.gameObject.transform.position.y &&
-                transform.parent.gameObject.GetComponent<Rigidbody2D>().velocity.y < 0 && 
-                collision.gameObject.GetComponent<Rigidbody2D>().velocity.y >= 0)
+            if (collision.transform.position.y < transform.parent.transform.position.y &&
+                transform.parent.GetComponent<Rigidbody2D>().velocity.y <
+                collision.GetComponent<Rigidbody2D>().velocity.y)
             {
                 collision.gameObject.layer = playerCollisionLayer;
-                collision.gameObject.GetComponent<PlayerController>().SetWithPlayer(true, player.gameObject);
+                collision.GetComponent<PlayerController>().SetWithPlayer(true, player.gameObject);
             }
         }
 
         if (collision.tag == "Button")
-        {
-            player.GetComponent<PlayerController>().IsGrounded();
-            collision.gameObject.GetComponent<ButtonBehavior>().ButtonDown(player.gameObject);
-        }
-            
-        //(playerObject.transform.position.y > gameObject.transform.position.y && playerObject.GetComponent<Rigidbody2D>().velocity.y < 0
+            collision.gameObject.GetComponent<ButtonBehavior>().ButtonDown(player.gameObject);     
+
+        if (collision.tag == "MovableBlock")
+            collision.GetComponent<MovableBlockBehavior>().AddPlayer(player.gameObject);   
     }
 
     private void OnTriggerStay2D(Collider2D collision)
     {
+        player.GetComponent<PlayerController>().IsGrounded();
+
         if (collision.tag == "Button")
         {
             if (!collision.GetComponent<ButtonBehavior>().GetActivation())
             {
-                collision.gameObject.GetComponent<ButtonBehavior>().StayPressed();
+                collision.GetComponent<ButtonBehavior>().StayPressed();
             }
         }
     }
 
     private void OnTriggerExit2D(Collider2D collision)
     {
+        player.GetComponent<PlayerController>().isNotGrounded();
+
         if (collision.tag == "Player")
         {
             collision.gameObject.layer = playerNoCollisionLayer;
-            collision.gameObject.GetComponent<PlayerController>().SetWithPlayer(false, null);
+            collision.GetComponent<PlayerController>().SetWithPlayer(false, null);
         }
 
         if (collision.tag == "Button")
         {
-            collision.gameObject.GetComponent<ButtonBehavior>().ButtonUp(player.gameObject);
+            collision.GetComponent<ButtonBehavior>().ButtonUp(player.gameObject);
+        }
+
+        if (collision.tag == "MovableBlock")
+        {
+            player.GetComponent<PlayerController>().IsGrounded();
+            collision.GetComponent<MovableBlockBehavior>().RemovePlayer(player.gameObject);
         }
     }
-
 }

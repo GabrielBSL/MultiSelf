@@ -17,7 +17,8 @@ public class PlayerController : MonoBehaviour
     private bool withPlayer;
     private bool wallColliding;
     private bool isFacingRight;
-    private bool isDead;
+    private bool aboveGround;
+    public bool isDead;
     private int currentMovement;
 
     public Transform frontUp;
@@ -158,9 +159,10 @@ public class PlayerController : MonoBehaviour
 
     private void Jump(bool jump)
     {
-        if (jump && !jumping)
+        if (jump && !jumping && aboveGround)
         {
             jumping = true;
+            aboveGround = false;
             rig.velocity = new Vector2(0f, jumpForce * gravityRotation);
 
             if (!isGhost)
@@ -187,7 +189,7 @@ public class PlayerController : MonoBehaviour
         {
             anim.SetBool("falling", false);
             anim.SetBool("jumping", true);
-            rig.velocity = Vector3.ClampMagnitude(rig.velocity, jumpForce);
+            rig.velocity = Vector3.ClampMagnitude(rig.velocity, jumpForce * 2f);
         }
 
         else
@@ -200,6 +202,12 @@ public class PlayerController : MonoBehaviour
     public void IsGrounded()
     {
         jumping = false;
+        aboveGround = true;
+    }
+
+    public void isNotGrounded()
+    {
+        aboveGround = false;
     }
 
     public void GetRecordedMovements(List<RecordValues> recordedMovements)

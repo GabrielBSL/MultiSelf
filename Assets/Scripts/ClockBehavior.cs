@@ -16,7 +16,7 @@ public class ClockBehavior : MonoBehaviour
             {
                 playerGet = true;
                 FindObjectOfType<GameManager>().AddTime(bonusTime);
-                FindObjectOfType<AudioManager>().Play("PLayerCatch");
+                FindObjectOfType<AudioManager>().Play("PlayerCatch");
                 gameObject.GetComponent<SpriteRenderer>().enabled = false;
             }
         }
