@@ -18,6 +18,7 @@ public class PlayerController : MonoBehaviour
     private bool wallColliding;
     private bool isFacingRight;
     private bool aboveGround;
+    private bool isTransitioning;
     public bool isDead;
     private int currentMovement;
 
@@ -50,6 +51,7 @@ public class PlayerController : MonoBehaviour
         isFacingRight = true;
         withPlayer = false;
         isDead = false;
+        isTransitioning = false;
         currentMovement = 0;
 
         if (isGhost)
@@ -289,13 +291,27 @@ public class PlayerController : MonoBehaviour
 
     public void GravityHasChanged()
     {
+        if (gravityChanged)
+            return;
+
+        if(!isGhost)
+            FindObjectOfType<AudioManager>().Play("PlayerGravity");
+
         gravityChanged = true;
+        GetComponent<Rigidbody2D>().gravityScale *= -1f;
+        GetComponent<PlayerController>().gravityRotation *= -1f;
+
+        if (isFacingRight)
+            transform.eulerAngles = new Vector3(0f, 90f - (90 * gravityRotation), 90f - (90 * gravityRotation));
+        else
+            transform.eulerAngles = new Vector3(0f, 90f + (90 * gravityRotation), 90f - (90 * gravityRotation));
+
         StartCoroutine(GravityDelay());
     }
 
     IEnumerator GravityDelay()
     {
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(0.3f);
         gravityChanged = false;
     }
 }

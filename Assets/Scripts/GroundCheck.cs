@@ -21,7 +21,8 @@ public class GroundCheck : MonoBehaviour
         {
             if (collision.transform.position.y < transform.parent.transform.position.y &&
                 transform.parent.GetComponent<Rigidbody2D>().velocity.y <
-                collision.GetComponent<Rigidbody2D>().velocity.y)
+                collision.GetComponent<Rigidbody2D>().velocity.y &&
+                FindObjectOfType<GameManager>().ghostColisions)
             {
                 collision.gameObject.layer = playerCollisionLayer;
                 collision.GetComponent<PlayerController>().SetWithPlayer(true, player.gameObject);
@@ -54,9 +55,11 @@ public class GroundCheck : MonoBehaviour
 
         if (collision.tag == "Player")
         {
-            collision.gameObject.layer = playerNoCollisionLayer;
-            collision.GetComponent<PlayerController>().SetWithPlayer(false, null);
-        }
+            if (FindObjectOfType<GameManager>().ghostColisions)
+            {
+                collision.gameObject.layer = playerNoCollisionLayer;
+                collision.GetComponent<PlayerController>().SetWithPlayer(false, null);
+            }        }
 
         if (collision.tag == "Button")
         {

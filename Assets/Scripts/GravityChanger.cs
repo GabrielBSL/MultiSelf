@@ -11,11 +11,8 @@ public class GravityChanger : MonoBehaviour
         {
             if (collision.GetComponent<PlayerController>().gravityChanged)
                 return;
-
+            
             collision.GetComponent<PlayerController>().GravityHasChanged();
-
-            collision.GetComponent<Rigidbody2D>().gravityScale *= -1f;
-            collision.GetComponent<PlayerController>().gravityRotation *= -1f;
         }
     }
 }

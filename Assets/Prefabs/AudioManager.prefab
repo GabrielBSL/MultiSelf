@@ -46,7 +46,7 @@ MonoBehaviour:
   sounds:
   - name: PlayerJump
     clip: {fileID: 8300000, guid: 2c5292ba5cf254919a6b9e2b18e04f49, type: 3}
-    volume: 1
+    volume: 0.5
     pitch: 1
     loop: 0
     source: {fileID: 0}
@@ -67,4 +67,112 @@ MonoBehaviour:
     volume: 1
     pitch: 1
     loop: 1
+    source: {fileID: 0}
+  - name: Stage_1
+    clip: {fileID: 8300000, guid: 3fbe52c7fd71fcd4abca0e3d5e7c3ae8, type: 3}
+    volume: 1
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: Stage_2
+    clip: {fileID: 8300000, guid: e0d6968c0a1efa54bb624fab53d1fb1d, type: 3}
+    volume: 1
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: Stage_3
+    clip: {fileID: 8300000, guid: 4e8396fe996295c49a7b3834ce3392ed, type: 3}
+    volume: 1
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: PlayerGravity
+    clip: {fileID: 8300000, guid: fe0b1f9aeb45b41b089175aeeabd5d95, type: 3}
+    volume: 1
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: Stage_4
+    clip: {fileID: 8300000, guid: 1caead23fdbbab64aa55be90d503777d, type: 3}
+    volume: 1
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: Stage_5
+    clip: {fileID: 8300000, guid: 02bccbe7c09457840a34a840479cb758, type: 3}
+    volume: 1
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: Stage_6
+    clip: {fileID: 8300000, guid: 842c5dbd163597d46ba90366d344dc49, type: 3}
+    volume: 1
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: Stage_7
+    clip: {fileID: 8300000, guid: d977d6110578c594896a6211483eee94, type: 3}
+    volume: 1
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: Stage_8
+    clip: {fileID: 8300000, guid: 9696603a414ae4048b8a55f42d04f5c9, type: 3}
+    volume: 1
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: Stage_9
+    clip: {fileID: 8300000, guid: e954f965531f3b54899128d94e8f3379, type: 3}
+    volume: 1
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: Stage_10
+    clip: {fileID: 8300000, guid: de3030f0a25d51941a6e542ab463e542, type: 3}
+    volume: 1
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: Stage_11
+    clip: {fileID: 8300000, guid: 00a45ab5952e7e247989a7049506645e, type: 3}
+    volume: 1
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: Stage_12
+    clip: {fileID: 8300000, guid: f0531cdacbe16c740931cf258308effe, type: 3}
+    volume: 1
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: Stage_13
+    clip: {fileID: 8300000, guid: 73fb6f8f58ec84443b5c739a3a39aee0, type: 3}
+    volume: 1
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: Ending
+    clip: {fileID: 8300000, guid: 492fc37e311ff5f4d9a44c90bc8e8b40, type: 3}
+    volume: 1
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: Button
+    clip: {fileID: 8300000, guid: 32d4b1811dda14a6cb9e059ee8ad17d2, type: 3}
+    volume: 1
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: PlayerNextLevel
+    clip: {fileID: 8300000, guid: 4e1ff8faed12a475eba9be0e46072269, type: 3}
+    volume: 1
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: PlayerReset
+    clip: {fileID: 8300000, guid: 130a177e727814a2ea78a886ab72213d, type: 3}
+    volume: 1
+    pitch: 1
+    loop: 0
     source: {fileID: 0}
