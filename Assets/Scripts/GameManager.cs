@@ -74,7 +74,7 @@ public class GameManager : MonoBehaviour
 
     private void CheckKeys()
     {
-        if (SceneManager.GetActiveScene().name == "Ending" || !player.GetComponent<PlayerController>().isDead || SceneManager.GetActiveScene().buildIndex < 4)
+        if (SceneManager.GetActiveScene().name == "Ending" || player.GetComponent<PlayerController>().isDead)
             return;
 
         if (Input.GetButtonDown("Cancel"))
@@ -83,10 +83,10 @@ public class GameManager : MonoBehaviour
         }
         if (Input.GetKeyDown("o"))
         {
-            if(!player.GetComponent<PlayerController>().isDead)
+            if(!player.GetComponent<PlayerController>().isDead && SceneManager.GetActiveScene().buildIndex >= 4)
                 ResetStage();
         }
-        if (Input.GetKeyDown("p"))
+        if (Input.GetKeyDown("p") && SceneManager.GetActiveScene().buildIndex >= 4)
         {
             StartRestart();
         }
